@@ -28,7 +28,6 @@ class User(db.Model):
     password      = db.Column(db.String(200), nullable=False)
     flat_number   = db.Column(db.String(20), nullable=False)
     role          = db.Column(db.String(10), default='user')
-    # ── New fields ──
     full_name     = db.Column(db.String(120), nullable=True)
     email         = db.Column(db.String(120), unique=True, nullable=True)
     mobile        = db.Column(db.String(15), nullable=True)
@@ -54,7 +53,6 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def save_base64_image(data_url, prefix, user_id):
-    """Decode a base64 data-URL and save it; return filename or None."""
     if data_url and data_url.startswith('data:image'):
         _, encoded = data_url.split(',', 1)
         fname = f"{prefix}_{user_id}_{int(datetime.utcnow().timestamp())}.jpg"
@@ -123,7 +121,6 @@ def signup():
             mobile=mobile,
         )
 
-        # Profile photo upload
         profile_file = request.files.get('profile_photo')
         if profile_file and profile_file.filename != '' and allowed_file(profile_file.filename):
             fname = secure_filename(f"profile_{username}_{int(datetime.utcnow().timestamp())}_{profile_file.filename}")
@@ -144,10 +141,10 @@ def login():
         user = User.query.filter_by(username=username).first()
 
         if user and check_password_hash(user.password, password):
-            session['user_id']    = user.id
-            session['username']   = user.username
-            session['flat_number']= user.flat_number
-            session['role']       = user.role
+            session['user_id']     = user.id
+            session['username']    = user.username
+            session['flat_number'] = user.flat_number
+            session['role']        = user.role
             if user.role == 'admin':
                 return redirect(url_for('admin_dashboard'))
             return redirect(url_for('dashboard'))
@@ -175,11 +172,9 @@ def dashboard():
         description = request.form['description'].strip()
         photo_filename = None
 
-        # Camera capture (base64)
         camera_data = request.form.get('camera_photo')
         photo_filename = save_base64_image(camera_data, 'cam', user.id)
 
-        # File upload fallback
         if not photo_filename and 'photo' in request.files:
             file = request.files['photo']
             if file and file.filename != '' and allowed_file(file.filename):
@@ -209,9 +204,9 @@ def profile():
     user = User.query.get(session['user_id'])
 
     if request.method == 'POST':
-        user.full_name   = request.form.get('full_name', '').strip()
-        user.mobile      = request.form.get('mobile', '').strip() or None
-        new_email        = request.form.get('email', '').strip() or None
+        user.full_name = request.form.get('full_name', '').strip()
+        user.mobile    = request.form.get('mobile', '').strip() or None
+        new_email      = request.form.get('email', '').strip() or None
 
         if new_email and new_email != user.email:
             existing = User.query.filter_by(email=new_email).first()
@@ -220,7 +215,6 @@ def profile():
                 return redirect(url_for('profile'))
         user.email = new_email
 
-        # Profile photo update
         profile_file = request.files.get('profile_photo')
         if profile_file and profile_file.filename != '' and allowed_file(profile_file.filename):
             fname = secure_filename(f"profile_{user.username}_{int(datetime.utcnow().timestamp())}_{profile_file.filename}")
@@ -240,12 +234,15 @@ def profile():
 @app.route('/admin')
 @admin_required
 def admin_dashboard():
-    reports = Report.query.order_by(Report.timestamp.desc()).all()
+    reports  = Report.query.order_by(Report.timestamp.desc()).all()
     total    = len(reports)
     pending  = sum(1 for r in reports if r.status == 'Pending')
     resolved = total - pending
+    # ✅ FIX: Count all non-admin users (society members)
+    members  = User.query.filter_by(role='user').count()
     return render_template('admin.html', reports=reports,
-                           total=total, pending=pending, resolved=resolved)
+                           total=total, pending=pending,
+                           resolved=resolved, members=members)
 
 
 @app.route('/admin/users')
@@ -263,7 +260,6 @@ def admin_delete_user(user_id):
         flash('Cannot delete an admin account.', 'danger')
         return redirect(url_for('admin_users'))
 
-    # Delete user's reports and associated photos
     for report in user.reports:
         if report.photo_filename:
             try:
@@ -272,7 +268,6 @@ def admin_delete_user(user_id):
                 pass
         db.session.delete(report)
 
-    # Delete profile photo
     if user.profile_photo:
         try:
             os.remove(os.path.join(app.config['UPLOAD_FOLDER'], user.profile_photo))

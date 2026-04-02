@@ -1,129 +1,426 @@
-{% extends "base.html" %}
-{% block title %}Admin Dashboard — CleanSociety{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard — CleanSociety</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green-deep:  #1a3d2b;
+      --green-mid:   #2e6b47;
+      --green-light: #4a9463;
+      --gold:        #c8a84b;
+      --gold-light:  #e8cc7a;
+      --cream:       #f8f4ec;
+      --cream-dark:  #ede7d9;
+      --text-dark:   #1a2518;
+      --text-muted:  #5a6b55;
+      --danger:      #c0392b;
+      --success:     #1e7d46;
+    }
+    body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--text-dark); }
 
-{% block content %}
-<div class="main-content">
+    /* NAV */
+    nav {
+      background: var(--green-deep);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    }
+    .nav-brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .nav-badge {
+      background: var(--gold);
+      color: var(--green-deep);
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 2px 8px;
+      border-radius: 20px;
+    }
+    .nav-links { display: flex; gap: 8px; align-items: center; }
+    .nav-links a {
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 7px 14px;
+      border-radius: 8px;
+      transition: background .2s, color .2s;
+    }
+    .nav-links a:hover, .nav-links a.active {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+    .nav-links a.logout {
+      color: rgba(255,180,180,0.8);
+      border: 1px solid rgba(255,180,180,0.2);
+    }
+    .nav-links a.logout:hover { background: rgba(192,57,43,0.2); color: #ffaaaa; }
 
-  <!-- HERO -->
-  <div class="page-hero">
-    <div class="page-hero-content">
-      <h1>🛡️ Admin Dashboard</h1>
-      <p>Manage all society waste reports and resident complaints</p>
-    </div>
-    <div class="page-hero-decor">♻️</div>
+    /* MAIN */
+    .main { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+
+    .page-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--green-deep);
+      margin-bottom: 6px;
+    }
+    .page-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 28px; }
+
+    /* Flash */
+    .flash-msg {
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .flash-danger  { background: #fde8e8; color: var(--danger);  border-left: 3px solid var(--danger); }
+    .flash-success { background: #e8f8ef; color: var(--success); border-left: 3px solid var(--success); }
+    .flash-warning { background: #fff8e1; color: #b7860b; border-left: 3px solid #f0c040; }
+    .flash-info    { background: #e8f0fe; color: #1a56b0; border-left: 3px solid #3b7bdc; }
+
+    /* STATS GRID — now 4 cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px 22px;
+      border: 1px solid var(--cream-dark);
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.07); }
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 80px; height: 80px;
+      border-radius: 0 0 0 80px;
+      opacity: 0.1;
+    }
+    .stat-card.total::after   { background: var(--green-mid); }
+    .stat-card.pending::after { background: #e67e22; }
+    .stat-card.resolved::after{ background: var(--success); }
+    .stat-card.members::after { background: var(--gold); }
+
+    .stat-icon { font-size: 28px; margin-bottom: 12px; }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .stat-card.total   .stat-num { color: var(--green-mid); }
+    .stat-card.pending .stat-num { color: #e67e22; }
+    .stat-card.resolved .stat-num { color: var(--success); }
+    .stat-card.members  .stat-num { color: #8b6914; }
+
+    .stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .stat-sub {
+      font-size: 11px;
+      color: #aaa;
+      margin-top: 6px;
+    }
+
+    /* REPORTS TABLE */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--green-deep);
+    }
+    .count-pill {
+      background: var(--green-deep);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .table-wrap {
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid var(--cream-dark);
+      overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; }
+    th {
+      background: var(--green-deep);
+      color: rgba(255,255,255,0.75);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 13px 16px;
+      text-align: left;
+    }
+    td {
+      padding: 14px 16px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--cream-dark);
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(248,244,236,0.5); }
+
+    .badge-status {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge-status.pending  { background: #fff3e0; color: #e67e22; }
+    .badge-status.resolved { background: #e8f8ef; color: var(--success); }
+
+    .report-photo {
+      width: 44px; height: 44px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 2px solid var(--cream-dark);
+      cursor: pointer;
+      transition: transform .2s;
+    }
+    .report-photo:hover { transform: scale(1.08); }
+    .no-photo { color: #ccc; font-size: 11px; }
+
+    .action-btns { display: flex; gap: 6px; }
+    .btn-resolve {
+      padding: 5px 12px;
+      border-radius: 7px;
+      font-size: 11px;
+      font-weight: 600;
+      text-decoration: none;
+      background: #e8f8ef;
+      color: var(--success);
+      transition: background .2s;
+    }
+    .btn-resolve:hover { background: #d0f0e0; }
+    .btn-del {
+      padding: 5px 12px;
+      border-radius: 7px;
+      font-size: 11px;
+      font-weight: 600;
+      text-decoration: none;
+      background: #fde8e8;
+      color: var(--danger);
+      transition: background .2s;
+    }
+    .btn-del:hover { background: #fccece; }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+    .empty-state .emoji { font-size: 48px; margin-bottom: 12px; }
+    .empty-state p { font-size: 14px; }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img { max-width: 90vw; max-height: 88vh; border-radius: 12px; }
+    .lightbox-close {
+      position: absolute;
+      top: 20px; right: 28px;
+      font-size: 32px;
+      color: #fff;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    @media (max-width: 900px) {
+      .stats-grid { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .main { padding: 20px 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-brand" href="{{ url_for('admin_dashboard') }}">
+    🌿 CleanSociety
+    <span class="nav-badge">ADMIN</span>
+  </a>
+  <div class="nav-links">
+    <a href="{{ url_for('admin_dashboard') }}" class="active">Reports</a>
+    <a href="{{ url_for('admin_users') }}">Members</a>
+    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
   </div>
+</nav>
 
-  <!-- STATS -->
+<div class="main">
+  <h1 class="page-title">Admin Dashboard</h1>
+  <p class="page-sub">Manage all society waste reports and resident activity</p>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div class="flash-msg flash-{{ category }}">
+        {% if category == 'danger' %}⚠️{% elif category == 'success' %}✅{% elif category == 'warning' %}🗑️{% else %}ℹ️{% endif %}
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endwith %}
+
+  <!-- STATS — 4 cards including Members -->
   <div class="stats-grid">
-    <div class="stat-card green">
+    <div class="stat-card total">
       <div class="stat-icon">📋</div>
-      <div class="stat-value">{{ total }}</div>
+      <div class="stat-num">{{ total }}</div>
       <div class="stat-label">Total Reports</div>
+      <div class="stat-sub">All time submissions</div>
     </div>
-    <div class="stat-card gold">
+    <div class="stat-card pending">
       <div class="stat-icon">⏳</div>
-      <div class="stat-value">{{ pending }}</div>
+      <div class="stat-num">{{ pending }}</div>
       <div class="stat-label">Pending</div>
+      <div class="stat-sub">Awaiting resolution</div>
     </div>
-    <div class="stat-card lime">
+    <div class="stat-card resolved">
       <div class="stat-icon">✅</div>
-      <div class="stat-value">{{ resolved }}</div>
+      <div class="stat-num">{{ resolved }}</div>
       <div class="stat-label">Resolved</div>
+      <div class="stat-sub">
+        {% if total > 0 %}{{ ((resolved / total) * 100) | round(0) | int }}% resolution rate{% else %}No reports yet{% endif %}
+      </div>
     </div>
-    <div class="stat-card teal">
-      <div class="stat-icon">📊</div>
-      <div class="stat-value">{{ ((resolved / total * 100)|round(0)|int) if total else 0 }}%</div>
-      <div class="stat-label">Resolution Rate</div>
+    <!-- ✅ NEW: Members card -->
+    <div class="stat-card members">
+      <div class="stat-icon">🏘️</div>
+      <div class="stat-num">{{ members }}</div>
+      <div class="stat-label">Society Members</div>
+      <div class="stat-sub"><a href="{{ url_for('admin_users') }}" style="color:var(--gold);text-decoration:none;font-weight:600;">View all members →</a></div>
     </div>
   </div>
 
   <!-- REPORTS TABLE -->
-  <div class="card">
-    <div class="card-header">
-      <h2>📋 All Complaints</h2>
-      <a href="{{ url_for('admin_users') }}" class="btn btn-outline btn-sm">👥 View Members</a>
-    </div>
-
-    {% if reports %}
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Photo</th>
-            <th>Resident</th>
-            <th>Flat</th>
-            <th>Location</th>
-            <th>Waste Type</th>
-            <th>Description</th>
-            <th>Date</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for report in reports %}
-          <tr>
-            <td><strong>#{{ report.id }}</strong></td>
-            <td>
-              {% if report.photo_filename %}
-                <img class="report-thumb"
-                     src="{{ url_for('static', filename='uploads/' + report.photo_filename) }}"
-                     alt="Photo"
-                     style="width:50px;height:50px;border-radius:8px;object-fit:cover;cursor:pointer;border:2px solid var(--green-pale);" />
-              {% else %}
-                <span style="font-size:1.6rem;">🗑️</span>
-              {% endif %}
-            </td>
-            <td>{{ report.user.full_name or report.user.username }}</td>
-            <td><strong>{{ report.user.flat_number }}</strong></td>
-            <td>{{ report.location }}</td>
-            <td>
-              <span style="background:var(--green-mist);padding:3px 9px;border-radius:6px;font-size:0.8rem;font-weight:500;color:var(--green-deep);">
-                {{ report.waste_type }}
-              </span>
-            </td>
-            <td style="max-width:180px;">
-              <span style="font-size:0.84rem;color:var(--text-mid);">
-                {{ report.description[:60] }}{% if report.description|length > 60 %}…{% endif %}
-              </span>
-            </td>
-            <td style="white-space:nowrap;font-size:0.82rem;color:var(--text-light);">
-              {{ report.timestamp.strftime('%d %b %Y') }}
-            </td>
-            <td>
-              {% if report.status == 'Resolved' %}
-                <span class="badge badge-resolved">✅ Resolved</span>
-              {% else %}
-                <span class="badge badge-pending">⏳ Pending</span>
-              {% endif %}
-            </td>
-            <td>
-              <div style="display:flex;gap:5px;flex-wrap:nowrap;">
-                {% if report.status == 'Pending' %}
-                  <a href="{{ url_for('resolve_report', report_id=report.id) }}"
-                     class="btn btn-sm btn-primary" title="Mark Resolved">✅</a>
-                {% endif %}
-                <a href="{{ url_for('delete_report', report_id=report.id) }}"
-                   class="btn btn-sm btn-danger"
-                   onclick="return confirm('Delete report #{{ report.id }}?')"
-                   title="Delete">🗑️</a>
-              </div>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
-    {% else %}
-      <div class="empty-state">
-        <div class="empty-icon">🌿</div>
-        <h3>No reports yet</h3>
-        <p>Your society is looking clean — no complaints submitted.</p>
-      </div>
-    {% endif %}
+  <div class="section-header">
+    <div class="section-title">All Reports</div>
+    <span class="count-pill">{{ total }} total</span>
   </div>
 
-  <div class="nature-strip">🌿 🌱 🍃 🌳 🍀 🌾 🌿 🌱 🍃 🌳</div>
+  <div class="table-wrap">
+    {% if reports %}
+    <table>
+      <thead>
+        <tr>
+          <th>#ID</th>
+          <th>Photo</th>
+          <th>Flat</th>
+          <th>Location</th>
+          <th>Waste Type</th>
+          <th>Description</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in reports %}
+        <tr>
+          <td><strong>#{{ r.id }}</strong></td>
+          <td>
+            {% if r.photo_filename %}
+              <img class="report-photo" src="{{ url_for('static', filename='uploads/' + r.photo_filename) }}"
+                   onclick="openLightbox(this.src)" title="Click to enlarge"/>
+            {% else %}
+              <span class="no-photo">No photo</span>
+            {% endif %}
+          </td>
+          <td>{{ r.user.flat_number }}</td>
+          <td>{{ r.location }}</td>
+          <td>{{ r.waste_type }}</td>
+          <td style="max-width:200px; white-space:normal; word-break:break-word;">{{ r.description[:80] }}{% if r.description|length > 80 %}…{% endif %}</td>
+          <td>
+            <span class="badge-status {{ r.status | lower }}">{{ r.status }}</span>
+          </td>
+          <td style="white-space:nowrap;">{{ r.timestamp.strftime('%d %b %Y') }}</td>
+          <td>
+            <div class="action-btns">
+              {% if r.status == 'Pending' %}
+              <a class="btn-resolve" href="{{ url_for('resolve_report', report_id=r.id) }}">✓ Resolve</a>
+              {% endif %}
+              <a class="btn-del" href="{{ url_for('delete_report', report_id=r.id) }}"
+                 onclick="return confirm('Delete report #{{ r.id }}?')">🗑 Delete</a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">
+      <div class="emoji">🌿</div>
+      <p>No reports submitted yet. The society is clean!</p>
+    </div>
+    {% endif %}
+  </div>
 </div>
-{% endblock %}
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <span class="lightbox-close">✕</span>
+  <img id="lightbox-img" src="" alt="Report photo"/>
+</div>
+
+<script>
+  function openLightbox(src) {
+    document.getElementById('lightbox-img').src = src;
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+  }
+</script>
+</body>
+</html>

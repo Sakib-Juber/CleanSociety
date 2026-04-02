@@ -1,80 +1,152 @@
-{% extends "base.html" %}
-{% block title %}Society Members — CleanSociety{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Society Members — CleanSociety Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green-deep: #1a3d2b; --green-mid: #2e6b47;
+      --gold: #c8a84b; --cream: #f8f4ec; --cream-dark: #ede7d9;
+      --text-dark: #1a2518; --text-muted: #5a6b55;
+      --danger: #c0392b; --success: #1e7d46;
+    }
+    body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--text-dark); }
+    nav {
+      background: var(--green-deep); padding: 0 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px; box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    }
+    .nav-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-badge { background: var(--gold); color: var(--green-deep); font-family: 'Jost', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1px; padding: 2px 8px; border-radius: 20px; }
+    .nav-links { display: flex; gap: 8px; align-items: center; }
+    .nav-links a { color: rgba(255,255,255,0.75); text-decoration: none; font-size: 13px; font-weight: 500; padding: 7px 14px; border-radius: 8px; transition: background .2s; }
+    .nav-links a:hover, .nav-links a.active { background: rgba(255,255,255,0.1); color: #fff; }
+    .nav-links a.logout { color: rgba(255,180,180,0.8); border: 1px solid rgba(255,180,180,0.2); }
+    .nav-links a.logout:hover { background: rgba(192,57,43,0.2); }
 
-{% block content %}
-<div class="main-content">
+    .main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+    .page-title { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 700; color: var(--green-deep); margin-bottom: 6px; }
+    .page-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 28px; }
 
-  <div class="page-hero">
-    <div class="page-hero-content">
-      <h1>👥 Society Members</h1>
-      <p>Manage registered residents of CleanSociety</p>
-    </div>
-    <div class="page-hero-decor">🏘️</div>
+    .flash-msg { padding: 12px 16px; border-radius: 10px; font-size: 13px; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+    .flash-warning { background: #fff8e1; color: #b7860b; border-left: 3px solid #f0c040; }
+    .flash-danger  { background: #fde8e8; color: var(--danger); border-left: 3px solid var(--danger); }
+
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .section-title { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 700; color: var(--green-deep); }
+    .count-pill { background: var(--green-deep); color: #fff; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; }
+
+    .members-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+    .member-card {
+      background: #fff; border-radius: 16px; border: 1px solid var(--cream-dark);
+      padding: 22px; display: flex; gap: 16px; align-items: flex-start;
+      transition: box-shadow .2s, transform .2s;
+    }
+    .member-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.07); transform: translateY(-2px); }
+
+    .member-avatar {
+      width: 56px; height: 56px; border-radius: 50%; object-fit: cover;
+      border: 2px solid var(--cream-dark); flex-shrink: 0;
+    }
+    .member-avatar-ph {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: var(--green-deep); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0;
+    }
+    .member-info { flex: 1; min-width: 0; }
+    .member-name { font-weight: 700; font-size: 15px; color: var(--text-dark); margin-bottom: 2px; }
+    .member-username { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; }
+    .member-flat {
+      display: inline-block; background: var(--cream); border: 1px solid var(--cream-dark);
+      border-radius: 20px; padding: 2px 10px; font-size: 11px; font-weight: 600;
+      color: var(--green-mid); margin-bottom: 8px;
+    }
+    .member-meta { font-size: 11px; color: var(--text-muted); display: flex; flex-direction: column; gap: 3px; }
+    .member-meta span { display: flex; align-items: center; gap: 5px; }
+
+    .member-footer { margin-top: 12px; display: flex; align-items: center; justify-content: space-between; }
+    .reports-badge {
+      font-size: 11px; font-weight: 600; color: var(--green-mid);
+      background: rgba(46,107,71,0.08); padding: 3px 10px; border-radius: 20px;
+    }
+    .btn-del-user {
+      padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 600;
+      text-decoration: none; background: #fde8e8; color: var(--danger); transition: background .2s;
+    }
+    .btn-del-user:hover { background: #fccece; }
+
+    .empty-state { text-align: center; padding: 60px; color: var(--text-muted); background: #fff; border-radius: 16px; border: 1px solid var(--cream-dark); }
+    .empty-state .emoji { font-size: 48px; margin-bottom: 12px; }
+
+    @media (max-width: 600px) { .members-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+<nav>
+  <a class="nav-brand" href="{{ url_for('admin_dashboard') }}">🌿 CleanSociety <span class="nav-badge">ADMIN</span></a>
+  <div class="nav-links">
+    <a href="{{ url_for('admin_dashboard') }}">Reports</a>
+    <a href="{{ url_for('admin_users') }}" class="active">Members</a>
+    <a href="{{ url_for('logout') }}" class="logout">Logout</a>
+  </div>
+</nav>
+
+<div class="main">
+  <h1 class="page-title">Society Members</h1>
+  <p class="page-sub">All registered residents in the CleanSociety portal</p>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div class="flash-msg flash-{{ category }}">
+        {% if category == 'warning' %}🗑️{% else %}⚠️{% endif %}
+        {{ message }}
+      </div>
+    {% endfor %}
+  {% endwith %}
+
+  <div class="section-header">
+    <div class="section-title">All Residents</div>
+    <span class="count-pill">{{ users | length }} members</span>
   </div>
 
-  <!-- STATS -->
-  <div class="stats-grid">
-    <div class="stat-card green">
-      <div class="stat-icon">🏠</div>
-      <div class="stat-value">{{ users|length }}</div>
-      <div class="stat-label">Total Members</div>
-    </div>
-    <div class="stat-card gold">
-      <div class="stat-icon">📋</div>
-      <div class="stat-value">{{ users|sum(attribute='reports')|list|length if users else 0 }}</div>
-      <div class="stat-label">Total Reports</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <h2>🏠 All Residents</h2>
-      <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline btn-sm">← Reports</a>
-    </div>
-
-    {% if users %}
-    <div class="card-body">
-      <div class="users-grid">
-        {% for u in users %}
-        <div class="user-card">
-          {% if u.profile_photo %}
-            <img class="user-card-avatar"
-                 src="{{ url_for('static', filename='uploads/' + u.profile_photo) }}"
-                 alt="{{ u.username }}" />
-          {% else %}
-            <div class="user-card-avatar-placeholder">🧑</div>
-          {% endif %}
-
-          <h4>{{ u.full_name or u.username }}</h4>
-          <p>👤 {{ u.username }}</p>
-          <p>🏠 Flat {{ u.flat_number }}</p>
-          {% if u.email %}<p>✉️ {{ u.email }}</p>{% endif %}
-          {% if u.mobile %}<p>📱 {{ u.mobile }}</p>{% endif %}
-          <p style="margin:0.5rem 0;">
-            <span class="badge badge-pending">{{ u.reports|length }} report{{ 's' if u.reports|length != 1 }}</span>
-          </p>
-          <p class="text-sm text-muted">Joined {{ u.joined_at.strftime('%d %b %Y') if u.joined_at }}</p>
-
-          <div class="mt-1">
-            <a href="{{ url_for('admin_delete_user', user_id=u.id) }}"
-               class="btn btn-danger btn-sm"
-               onclick="return confirm('Remove {{ u.username }} and all their reports?')">
-              🗑️ Remove
-            </a>
-          </div>
+  {% if users %}
+  <div class="members-grid">
+    {% for u in users %}
+    <div class="member-card">
+      {% if u.profile_photo %}
+        <img class="member-avatar" src="{{ url_for('static', filename='uploads/' + u.profile_photo) }}" alt="Avatar"/>
+      {% else %}
+        <div class="member-avatar-ph">👤</div>
+      {% endif %}
+      <div class="member-info">
+        <div class="member-name">{{ u.full_name or u.username }}</div>
+        <div class="member-username">@{{ u.username }}</div>
+        <div class="member-flat">🏠 {{ u.flat_number }}</div>
+        <div class="member-meta">
+          {% if u.email %}<span>📧 {{ u.email }}</span>{% endif %}
+          {% if u.mobile %}<span>📱 {{ u.mobile }}</span>{% endif %}
+          <span>📅 Joined {{ u.joined_at.strftime('%d %b %Y') }}</span>
         </div>
-        {% endfor %}
+        <div class="member-footer">
+          <span class="reports-badge">📋 {{ u.reports | length }} report(s)</span>
+          <a class="btn-del-user"
+             href="{{ url_for('admin_delete_user', user_id=u.id) }}"
+             onclick="return confirm('Remove {{ u.username }} and all their reports?')">🗑 Remove</a>
+        </div>
       </div>
     </div>
-    {% else %}
-      <div class="empty-state">
-        <div class="empty-icon">🌱</div>
-        <h3>No members yet</h3>
-        <p>Residents will appear here once they sign up.</p>
-      </div>
-    {% endif %}
+    {% endfor %}
   </div>
-
-  <div class="nature-strip">🌿 🌱 🍃 🌳 🍀</div>
+  {% else %}
+  <div class="empty-state">
+    <div class="emoji">🏘️</div>
+    <p>No residents have registered yet.</p>
+  </div>
+  {% endif %}
 </div>
-{% endblock %}
+</body>
+</html>

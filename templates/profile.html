@@ -1,94 +1,120 @@
 {% extends "base.html" %}
 {% block title %}My Profile — CleanSociety{% endblock %}
 
+{% block extra_css %}
+.page-title { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 700; color: var(--green-deep); margin-bottom: 6px; }
+.page-sub { font-size: 13px; color: var(--text-muted); margin-bottom: 28px; }
+.profile-grid { display: grid; grid-template-columns: 260px 1fr; gap: 24px; align-items: start; }
+.card { background: #fff; border-radius: 16px; border: 1px solid var(--cream-dark); padding: 28px; }
+.card-title { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 700; color: var(--green-deep); margin-bottom: 20px; }
+.avatar-wrap { text-align: center; margin-bottom: 20px; }
+.avatar {
+  width: 100px; height: 100px; border-radius: 50%; object-fit: cover;
+  border: 3px solid var(--cream-dark); margin-bottom: 12px;
+}
+.avatar-placeholder {
+  width: 100px; height: 100px; border-radius: 50%;
+  background: var(--green-deep); color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 36px; margin-bottom: 12px;
+}
+.username-display { font-weight: 700; font-size: 1.1rem; color: var(--text-dark); }
+.flat-display { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.meta-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+.meta-list li { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-muted); }
+.meta-list li span { font-weight: 500; color: var(--text-dark); }
+
+.field-group { margin-bottom: 16px; }
+.field-label { display: block; font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 7px; }
+.field-wrap { position: relative; }
+.field-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 15px; pointer-events: none; }
+.field-wrap input {
+  width: 100%; padding: 12px 12px 12px 42px;
+  border: 1.5px solid var(--cream-dark); border-radius: 12px;
+  background: var(--cream); font-family: 'Jost', sans-serif; font-size: 14px;
+  color: var(--text-dark); outline: none; transition: border-color .2s;
+}
+.field-wrap input:focus { border-color: var(--green-mid); background: #fff; box-shadow: 0 0 0 3px rgba(46,107,71,0.1); }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.field-group.full { grid-column: 1 / -1; }
+.btn-save {
+  padding: 13px 28px; background: var(--green-deep); color: #fff;
+  border: none; border-radius: 12px; font-family: 'Jost', sans-serif;
+  font-size: 14px; font-weight: 600; cursor: pointer; transition: background .2s;
+}
+.btn-save:hover { background: var(--green-mid); }
+.joined-chip {
+  display: inline-block; background: var(--cream); border: 1px solid var(--cream-dark);
+  border-radius: 20px; padding: 4px 12px; font-size: 11px; color: var(--text-muted); margin-top: 10px;
+}
+
+@media (max-width: 700px) {
+  .profile-grid { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+}
+{% endblock %}
+
 {% block content %}
-<div class="main-content" style="max-width:720px;">
+<h1 class="page-title">My Profile</h1>
+<p class="page-sub">View and update your resident information</p>
 
-  <div class="page-hero">
-    <div class="page-hero-content">
-      <h1>👤 My Profile</h1>
-      <p>Update your personal details and profile photo</p>
-    </div>
-    <div class="page-hero-decor">🌱</div>
-  </div>
-
-  <!-- AVATAR CARD -->
-  <div class="profile-avatar-wrap">
-    {% if user.profile_photo %}
-      <img id="profile_photo_preview"
-           class="profile-avatar"
-           src="{{ url_for('static', filename='uploads/' + user.profile_photo) }}"
-           alt="Profile Photo" />
-    {% else %}
-      <div id="profile_photo_preview_placeholder" class="profile-avatar-placeholder">🧑</div>
-      <img id="profile_photo_preview" src="" alt="Preview"
-           class="profile-avatar" style="display:none;" />
-    {% endif %}
-
-    <div class="text-center">
-      <div class="profile-name">{{ user.full_name or user.username }}</div>
-      <div class="profile-flat">🏠 Flat {{ user.flat_number }}</div>
-      <div class="text-sm text-muted mt-1">Joined {{ user.joined_at.strftime('%B %Y') if user.joined_at }}</div>
-    </div>
-
-    <label class="photo-upload-label" for="profile_photo_input">
-      📷 Change Photo
-    </label>
-  </div>
-
-  <!-- EDIT FORM -->
+<div class="profile-grid">
+  <!-- Sidebar -->
   <div class="card">
-    <div class="card-header">
-      <h3>✏️ Edit Information</h3>
+    <div class="avatar-wrap">
+      {% if user.profile_photo %}
+        <img class="avatar" src="{{ url_for('static', filename='uploads/' + user.profile_photo) }}" alt="Profile"/>
+      {% else %}
+        <div class="avatar-placeholder">👤</div>
+      {% endif %}
+      <div class="username-display">{{ user.username }}</div>
+      <div class="flat-display">🏠 Flat {{ user.flat_number }}</div>
+      <div class="joined-chip">Joined {{ user.joined_at.strftime('%b %Y') }}</div>
     </div>
-    <div class="card-body">
-      <form method="POST" action="{{ url_for('profile') }}" enctype="multipart/form-data">
-        <input type="file" id="profile_photo_input" name="profile_photo" accept="image/*" />
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="full_name">Full Name</label>
-            <input type="text" id="full_name" name="full_name"
-                   value="{{ user.full_name or '' }}" placeholder="Your full name" />
-          </div>
-          <div class="form-group">
-            <label>Username</label>
-            <input type="text" value="{{ user.username }}" disabled
-                   style="background:var(--green-mist);cursor:not-allowed;" />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email"
-                   value="{{ user.email or '' }}" placeholder="your@email.com" />
-          </div>
-          <div class="form-group">
-            <label for="mobile">Mobile</label>
-            <input type="tel" id="mobile" name="mobile"
-                   value="{{ user.mobile or '' }}" placeholder="+91 98765 43210" />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label>Flat Number</label>
-          <input type="text" value="{{ user.flat_number }}" disabled
-                 style="background:var(--green-mist);cursor:not-allowed;" />
-        </div>
-
-        <div class="mt-2 flex gap-1">
-          <button type="submit" class="btn btn-primary">
-            💾 Save Changes
-          </button>
-          <a href="{{ url_for('dashboard') }}" class="btn btn-outline">
-            ← Back
-          </a>
-        </div>
-      </form>
-    </div>
+    <ul class="meta-list">
+      <li>📛 <span>{{ user.full_name or '—' }}</span></li>
+      <li>📧 <span>{{ user.email or '—' }}</span></li>
+      <li>📱 <span>{{ user.mobile or '—' }}</span></li>
+      <li>📋 <span>{{ user.reports | length }} Reports Filed</span></li>
+    </ul>
   </div>
 
-  <div class="nature-strip">🌿 🌱 🍃 🌳 🍀</div>
+  <!-- Edit Form -->
+  <div class="card">
+    <div class="card-title">✏️ Edit Information</div>
+    <form method="POST" enctype="multipart/form-data">
+      <div class="form-grid">
+        <div class="field-group full">
+          <label class="field-label">Full Name</label>
+          <div class="field-wrap">
+            <span class="field-icon">📛</span>
+            <input type="text" name="full_name" value="{{ user.full_name or '' }}" placeholder="Your full name"/>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Email</label>
+          <div class="field-wrap">
+            <span class="field-icon">📧</span>
+            <input type="email" name="email" value="{{ user.email or '' }}" placeholder="you@example.com"/>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Mobile</label>
+          <div class="field-wrap">
+            <span class="field-icon">📱</span>
+            <input type="tel" name="mobile" value="{{ user.mobile or '' }}" placeholder="9XXXXXXXXX"/>
+          </div>
+        </div>
+        <div class="field-group full">
+          <label class="field-label">Update Profile Photo</label>
+          <div class="field-wrap">
+            <span class="field-icon">🖼️</span>
+            <input type="file" name="profile_photo" accept="image/*" style="padding-left:42px;"/>
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn-save">Save Changes →</button>
+    </form>
+  </div>
 </div>
 {% endblock %}
