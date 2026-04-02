@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clean Society AI Chatbot</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e8f5e9, #fff3e0);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        header {
+            background: #1a3a2a;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        /* Floating Leaves Background */
+        .leaves {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .leaf {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(76, 175, 80, 0.15);
+            border-radius: 50% 0 50% 0;
+            transform: rotate(45deg);
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .chat-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 12px 15px;
+            border-radius: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .user {
+            align-self: flex-end;
+            background: #4caf50;
+            color: white;
+            border-bottom-right-radius: 0;
+        }
+
+        .bot {
+            align-self: flex-start;
+            background: #ffe0b2;
+            color: #333;
+            border-bottom-left-radius: 0;
+        }
+
+        .input-area {
+            display: flex;
+            padding: 10px;
+            background: white;
+            border-top: 1px solid #ccc;
+            position: relative;
+            z-index: 1;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+
+        button {
+            margin-left: 10px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            background: #2e7d32;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1b5e20;
+        }
+
+        .welcome-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            z-index: 10;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .bot-avatar {
+            font-size: 50px;
+            margin-bottom: 10px;
+            animation: wave 2s infinite;
+        }
+
+        @keyframes wave {
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(15deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>🌱 Clean Society AI Chatbot</header>
+
+    <!-- Leaves Background -->
+    <div class="leaves" id="leaves"></div>
+
+    <div class="chat-container" id="chat"></div>
+
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Ask about waste management...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <div class="welcome-screen" id="welcome">
+        <div class="card">
+            <div class="bot-avatar">🤖👋</div>
+            <h2>Hello! I'm Clean Society AI</h2>
+            <p>Ask me about recycling, reuse, and eco-friendly ideas.</p>
+            <button onclick="startChat()">Start Chat</button>
+        </div>
+    </div>
+
+    <script>
+        const API_KEY = "AIzaSyBsLVs770Ts4lpnfcb2AR9tDMiSf_TBKPM";
+
+        function startChat() {
+            document.getElementById("welcome").style.display = "none";
+
+            // Initial AI welcome message in chat
+            addMessage("Hello 👋 Welcome to Clean Society AI! I can help you with recycling, reuse ideas, harmful waste identification, and creating useful products from waste. How can I assist you today?", "bot");
+        }
+
+        // Generate floating leaves
+        const leavesContainer = document.getElementById("leaves");
+        for (let i = 0; i < 25; i++) {
+            const leaf = document.createElement("div");
+            leaf.classList.add("leaf");
+            leaf.style.left = Math.random() * 100 + "vw";
+            leaf.style.animationDuration = (5 + Math.random() * 5) + "s";
+            leaf.style.animationDelay = Math.random() * 5 + "s";
+            leavesContainer.appendChild(leaf);
+        }
+
+        function addMessage(text, sender) {
+            const chat = document.getElementById("chat");
+            const msg = document.createElement("div");
+            msg.classList.add("message", sender);
+            msg.innerText = text;
+            chat.appendChild(msg);
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById("userInput");
+            const text = input.value.trim();
+            if (!text) return;
+
+            addMessage(text, "user");
+            input.value = "";
+
+            addMessage("Typing...", "bot");
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${API_KEY}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: `You are an AI helping with waste management. Question: ${text}` }] }]
+                    })
+                });
+
+                const data = await response.json();
+                const botReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response";
+
+                document.querySelector(".chat-container").lastChild.remove();
+                addMessage(botReply, "bot");
+
+            } catch (error) {
+                document.querySelector(".chat-container").lastChild.remove();
+                addMessage("Error connecting to AI", "bot");
+            }
+        }
+
+        document.getElementById("userInput").addEventListener("keypress", function (e) {
+            if (e.key === "Enter") sendMessage();
+        });
+    </script>
+
+</body>
+
+</html>
