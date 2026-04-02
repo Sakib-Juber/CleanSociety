@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up — CleanSociety</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>" />
+</head>
+<body>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container" style="position:fixed;top:1rem;left:50%;transform:translateX(-50%);width:min(420px,90vw);z-index:200;">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">
+            {% if category == 'success' %}✅{% elif category == 'danger' %}❌{% elif category == 'warning' %}⚠️{% else %}ℹ️{% endif %}
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="auth-wrapper">
+
+    <!-- LEFT VISUAL -->
+    <div class="auth-visual">
+      <span class="leaf leaf-1">🌳</span>
+      <span class="leaf leaf-2">🌿</span>
+      <span class="leaf leaf-3">🍀</span>
+      <span class="leaf leaf-4">🌱</span>
+      <span class="leaf leaf-5">🍃</span>
+
+      <div class="auth-visual-content">
+        <span class="auth-visual-icon">🌱</span>
+        <h2>Join CleanSociety</h2>
+        <p>Be part of a movement that keeps our neighbourhood green, clean, and beautiful.</p>
+
+        <div class="auth-features">
+          <div class="auth-feature">
+            <span>🏠</span>
+            <span>Register your flat & join the community</span>
+          </div>
+          <div class="auth-feature">
+            <span>📝</span>
+            <span>Submit waste reports instantly</span>
+          </div>
+          <div class="auth-feature">
+            <span>🔔</span>
+            <span>Get updates when issues are resolved</span>
+          </div>
+          <div class="auth-feature">
+            <span>🤝</span>
+            <span>Work with neighbours & admin together</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT FORM -->
+    <div class="auth-form-panel">
+      <div class="auth-card" style="max-width:480px;">
+
+        <div class="auth-header">
+          <div style="font-size:2.4rem;margin-bottom:0.5rem;">🌱</div>
+          <h1>Create Account</h1>
+          <p>Register as a CleanSociety resident</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('signup') }}" enctype="multipart/form-data">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="username">Username *</label>
+              <input type="text" id="username" name="username"
+                     placeholder="e.g. ravi_sharma" required />
+            </div>
+            <div class="form-group">
+              <label for="flat_number">Flat Number *</label>
+              <input type="text" id="flat_number" name="flat_number"
+                     placeholder="e.g. A-204" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="full_name">Full Name</label>
+            <input type="text" id="full_name" name="full_name"
+                   placeholder="Your full name" />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email"
+                     placeholder="you@example.com" />
+            </div>
+            <div class="form-group">
+              <label for="mobile">Mobile</label>
+              <input type="tel" id="mobile" name="mobile"
+                     placeholder="+91 98765 43210" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password *</label>
+            <div class="input-icon-wrap">
+              <span class="icon">🔒</span>
+              <input type="password" id="password" name="password"
+                     placeholder="Create a strong password" required />
+            </div>
+          </div>
+
+          <!-- Profile Photo -->
+          <div class="form-group">
+            <label>Profile Photo</label>
+            <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+              <label class="photo-upload-label" for="profile_photo_input">
+                📷 Choose Photo
+              </label>
+              <input type="file" id="profile_photo_input" name="profile_photo"
+                     accept="image/*" />
+              <img id="profile_photo_preview"
+                   src="" alt="Preview"
+                   style="display:none;width:60px;height:60px;border-radius:50%;
+                          object-fit:cover;border:3px solid var(--green-bright);" />
+            </div>
+          </div>
+
+          <div class="mt-2">
+            <button type="submit" class="btn btn-primary btn-full">
+              🌱 Create My Account
+            </button>
+          </div>
+
+        </form>
+
+        <div class="section-divider mt-2">Already have an account?</div>
+        <div class="text-center">
+          <a href="{{ url_for('login') }}" class="btn btn-outline btn-full">
+            🌿 Sign In
+          </a>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — CleanSociety{% endblock %}
+
+{% block content %}
+<div class="main-content">
+
+  <!-- HERO -->
+  <div class="page-hero">
+    <div class="page-hero-content">
+      <h1>👋 Hello, {{ user.full_name or user.username }}</h1>
+      <p>Flat {{ user.flat_number }} &nbsp;·&nbsp; Report waste issues and keep our society clean.</p>
+    </div>
+    <div class="page-hero-decor">🌿</div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card green">
+      <div class="stat-icon">📋</div>
+      <div class="stat-value">{{ reports|length }}</div>
+      <div class="stat-label">Total Reports</div>
+    </div>
+    <div class="stat-card gold">
+      <div class="stat-icon">⏳</div>
+      <div class="stat-value">{{ reports|selectattr('status','equalto','Pending')|list|length }}</div>
+      <div class="stat-label">Pending</div>
+    </div>
+    <div class="stat-card lime">
+      <div class="stat-icon">✅</div>
+      <div class="stat-value">{{ reports|selectattr('status','equalto','Resolved')|list|length }}</div>
+      <div class="stat-label">Resolved</div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1.5fr;gap:1.5rem;align-items:start;" class="dashboard-grid">
+
+    <!-- SUBMIT REPORT FORM -->
+    <div class="card">
+      <div class="card-header">
+        <h3>Submit New Report</h3>
+      </div>
+      <div class="card-body">
+        <form method="POST" action="{{ url_for('dashboard') }}" enctype="multipart/form-data">
+
+          <div class="form-group">
+            <label for="location">Location</label>
+            <input type="text" id="location" name="location" placeholder="e.g. Near Gate 2, Block C stairs" required />
+          </div>
+
+          <div class="form-group">
+            <label for="waste_type">Waste Type</label>
+            <select id="waste_type" name="waste_type" required>
+              <option value="" disabled selected>Select category</option>
+              <option>Household Garbage</option>
+              <option>Construction Debris</option>
+              <option>Plastic / Bottles</option>
+              <option>Garden / Leaves</option>
+              <option>Hazardous Material</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="3" placeholder="Describe the waste issue in detail..."
+              required></textarea>
+          </div>
+
+          <!-- PHOTO CAPTURE / UPLOAD -->
+          <div class="form-group">
+            <label>Photo Evidence</label>
+            <div class="camera-section">
+              <p class="text-sm text-muted" style="margin-bottom:0.8rem;">📸 Use camera or upload a photo</p>
+
+              <div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:0.8rem;">
+                <button type="button" id="open-camera" class="btn btn-outline btn-sm">📷 Open Camera</button>
+                <button type="button" id="capture-btn" class="btn btn-primary btn-sm" style="display:none;">📸
+                  Capture</button>
+                <button type="button" id="retake-btn" class="btn btn-sm btn-outline" style="display:none;">🔄
+                  Retake</button>
+                <button type="button" id="close-camera" class="btn btn-sm"
+                  style="display:none; background:var(--green-mist);">✕ Close</button>
+              </div>
+
+              <video id="camera-stream" autoplay playsinline
+                style="display:none; width:100%; border-radius:10px;"></video>
+
+              <canvas id="photo-canvas" style="display:none;"></canvas>
+
+              <img id="main-preview" src="" alt="Preview"
+                style="display:none; max-width:100%; border-radius:10px; border:2px solid var(--green-bright);" />
+
+              <div class="section-divider" style="margin:0.8rem 0;">or upload</div>
+
+              <label class="photo-upload-label" for="photo_input" style="justify-content:center; cursor:pointer;">
+                🗂️ Choose from gallery
+              </label>
+              <input type="file" id="photo_input" name="photo" accept="image/*" style="display:none;" />
+
+              <input type="hidden" id="camera_data" name="camera_image">
+            </div>
+          </div>
+
+          <input type="hidden" id="camera_photo" name="camera_photo" value="" />
+
+          <div class="mt-2">
+            <button type="submit" class="btn btn-primary btn-full">
+              Submit Report
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- REPORTS LIST -->
+    <div class="card">
+      <div class="card-header">
+        <h3>📋 My Reports</h3>
+        <span class="badge badge-pending">{{ reports|length }} total</span>
+      </div>
+      <div class="card-body" style="padding:1rem;">
+        {% if reports %}
+        <div class="reports-list">
+          {% for report in reports %}
+          <div class="report-card">
+            <!-- Thumb -->
+            <div>
+              {% if report.photo_filename %}
+              <img class="report-thumb" src="{{ url_for('static', filename='uploads/' + report.photo_filename) }}"
+                alt="Photo" />
+              {% else %}
+              <div class="report-thumb-placeholder">🗑️</div>
+              {% endif %}
+            </div>
+
+            <!-- Info -->
+            <div class="report-info">
+              <h4>{{ report.waste_type }}</h4>
+              <p>📍 {{ report.location }}</p>
+              <p class="text-sm" style="color:var(--text-mid);">{{ report.description[:80] }}{% if
+                report.description|length > 80 %}…{% endif %}</p>
+              <div class="report-meta">
+                <span>🕐 {{ report.timestamp.strftime('%d %b %Y, %I:%M %p') }}</span>
+              </div>
+            </div>
+
+            <!-- Status -->
+            <div>
+              {% if report.status == 'Resolved' %}
+              <span class="badge badge-resolved">✅ Resolved</span>
+              {% else %}
+              <span class="badge badge-pending">⏳ Pending</span>
+              {% endif %}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+          <div class="empty-icon">🌿</div>
+          <h3>No reports yet</h3>
+          <p>Submit your first waste report using the form on the left.</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+  </div><!-- end grid -->
+
+  <div class="nature-strip">🌿 🌱 🍃 🌳 🍀 🌾 🌿 🌱 🍃 🌳</div>
+</div>
+
+<style>
+  @media(max-width:900px) {
+    .dashboard-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>
+{% endblock %}

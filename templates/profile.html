@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}My Profile — CleanSociety{% endblock %}
+
+{% block content %}
+<div class="main-content" style="max-width:720px;">
+
+  <div class="page-hero">
+    <div class="page-hero-content">
+      <h1>👤 My Profile</h1>
+      <p>Update your personal details and profile photo</p>
+    </div>
+    <div class="page-hero-decor">🌱</div>
+  </div>
+
+  <!-- AVATAR CARD -->
+  <div class="profile-avatar-wrap">
+    {% if user.profile_photo %}
+      <img id="profile_photo_preview"
+           class="profile-avatar"
+           src="{{ url_for('static', filename='uploads/' + user.profile_photo) }}"
+           alt="Profile Photo" />
+    {% else %}
+      <div id="profile_photo_preview_placeholder" class="profile-avatar-placeholder">🧑</div>
+      <img id="profile_photo_preview" src="" alt="Preview"
+           class="profile-avatar" style="display:none;" />
+    {% endif %}
+
+    <div class="text-center">
+      <div class="profile-name">{{ user.full_name or user.username }}</div>
+      <div class="profile-flat">🏠 Flat {{ user.flat_number }}</div>
+      <div class="text-sm text-muted mt-1">Joined {{ user.joined_at.strftime('%B %Y') if user.joined_at }}</div>
+    </div>
+
+    <label class="photo-upload-label" for="profile_photo_input">
+      📷 Change Photo
+    </label>
+  </div>
+
+  <!-- EDIT FORM -->
+  <div class="card">
+    <div class="card-header">
+      <h3>✏️ Edit Information</h3>
+    </div>
+    <div class="card-body">
+      <form method="POST" action="{{ url_for('profile') }}" enctype="multipart/form-data">
+        <input type="file" id="profile_photo_input" name="profile_photo" accept="image/*" />
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="full_name">Full Name</label>
+            <input type="text" id="full_name" name="full_name"
+                   value="{{ user.full_name or '' }}" placeholder="Your full name" />
+          </div>
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" value="{{ user.username }}" disabled
+                   style="background:var(--green-mist);cursor:not-allowed;" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email"
+                   value="{{ user.email or '' }}" placeholder="your@email.com" />
+          </div>
+          <div class="form-group">
+            <label for="mobile">Mobile</label>
+            <input type="tel" id="mobile" name="mobile"
+                   value="{{ user.mobile or '' }}" placeholder="+91 98765 43210" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Flat Number</label>
+          <input type="text" value="{{ user.flat_number }}" disabled
+                 style="background:var(--green-mist);cursor:not-allowed;" />
+        </div>
+
+        <div class="mt-2 flex gap-1">
+          <button type="submit" class="btn btn-primary">
+            💾 Save Changes
+          </button>
+          <a href="{{ url_for('dashboard') }}" class="btn btn-outline">
+            ← Back
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="nature-strip">🌿 🌱 🍃 🌳 🍀</div>
+</div>
+{% endblock %}

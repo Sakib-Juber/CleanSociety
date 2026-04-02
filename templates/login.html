@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login — CleanSociety</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌿</text></svg>" />
+</head>
+<body>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container" style="position:fixed;top:1rem;left:50%;transform:translateX(-50%);width:min(420px,90vw);z-index:200;">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">
+            {% if category == 'success' %}✅{% elif category == 'danger' %}❌{% elif category == 'warning' %}⚠️{% else %}ℹ️{% endif %}
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="auth-wrapper">
+
+    <!-- LEFT: VISUAL PANEL -->
+    <div class="auth-visual">
+      <span class="leaf leaf-1">🍃</span>
+      <span class="leaf leaf-2">🌿</span>
+      <span class="leaf leaf-3">🌱</span>
+      <span class="leaf leaf-4">🍀</span>
+      <span class="leaf leaf-5">🌾</span>
+
+      <div class="auth-visual-content">
+        <span class="auth-visual-icon">♻️</span>
+        <h2>CleanSociety</h2>
+        <p>Together we build a cleaner, greener community for everyone who calls this home.</p>
+
+        <div class="auth-features">
+          <div class="auth-feature">
+            <span>📸</span>
+            <span>Capture & report waste with your camera</span>
+          </div>
+          <div class="auth-feature">
+            <span>📍</span>
+            <span>Pin exact locations for quick resolution</span>
+          </div>
+          <div class="auth-feature">
+            <span>✅</span>
+            <span>Track every complaint in real time</span>
+          </div>
+          <div class="auth-feature">
+            <span>🏠</span>
+            <span>Society-wide dashboard for admins</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: FORM PANEL -->
+    <div class="auth-form-panel">
+      <div class="auth-card">
+
+        <div class="auth-header">
+          <div style="font-size:2.4rem;margin-bottom:0.5rem;">🌿</div>
+          <h1>Welcome back</h1>
+          <p>Sign in to your CleanSociety account</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('login') }}">
+
+          <div class="form-group">
+            <label for="username">Username</label>
+            <div class="input-icon-wrap">
+              <span class="icon">👤</span>
+              <input type="text" id="username" name="username"
+                     placeholder="Enter your username" required autocomplete="username" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-icon-wrap">
+              <span class="icon">🔒</span>
+              <input type="password" id="password" name="password"
+                     placeholder="Enter your password" required autocomplete="current-password" />
+            </div>
+          </div>
+
+          <div class="mt-2">
+            <button type="submit" class="btn btn-primary btn-full">
+              🌿 Sign In
+            </button>
+          </div>
+
+        </form>
+
+        <div class="section-divider mt-2">New to CleanSociety?</div>
+
+        <div class="text-center">
+          <a href="{{ url_for('signup') }}" class="btn btn-outline btn-full">
+            ✨ Create an Account
+          </a>
+        </div>
+
+        <p class="text-center text-muted text-sm mt-2" style="margin-top:1.5rem;">
+          🌍 Making our society cleaner, one report at a time.
+        </p>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

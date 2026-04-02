@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard — CleanSociety{% endblock %}
+
+{% block content %}
+<div class="main-content">
+
+  <!-- HERO -->
+  <div class="page-hero">
+    <div class="page-hero-content">
+      <h1>🛡️ Admin Dashboard</h1>
+      <p>Manage all society waste reports and resident complaints</p>
+    </div>
+    <div class="page-hero-decor">♻️</div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card green">
+      <div class="stat-icon">📋</div>
+      <div class="stat-value">{{ total }}</div>
+      <div class="stat-label">Total Reports</div>
+    </div>
+    <div class="stat-card gold">
+      <div class="stat-icon">⏳</div>
+      <div class="stat-value">{{ pending }}</div>
+      <div class="stat-label">Pending</div>
+    </div>
+    <div class="stat-card lime">
+      <div class="stat-icon">✅</div>
+      <div class="stat-value">{{ resolved }}</div>
+      <div class="stat-label">Resolved</div>
+    </div>
+    <div class="stat-card teal">
+      <div class="stat-icon">📊</div>
+      <div class="stat-value">{{ ((resolved / total * 100)|round(0)|int) if total else 0 }}%</div>
+      <div class="stat-label">Resolution Rate</div>
+    </div>
+  </div>
+
+  <!-- REPORTS TABLE -->
+  <div class="card">
+    <div class="card-header">
+      <h2>📋 All Complaints</h2>
+      <a href="{{ url_for('admin_users') }}" class="btn btn-outline btn-sm">👥 View Members</a>
+    </div>
+
+    {% if reports %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Photo</th>
+            <th>Resident</th>
+            <th>Flat</th>
+            <th>Location</th>
+            <th>Waste Type</th>
+            <th>Description</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for report in reports %}
+          <tr>
+            <td><strong>#{{ report.id }}</strong></td>
+            <td>
+              {% if report.photo_filename %}
+                <img class="report-thumb"
+                     src="{{ url_for('static', filename='uploads/' + report.photo_filename) }}"
+                     alt="Photo"
+                     style="width:50px;height:50px;border-radius:8px;object-fit:cover;cursor:pointer;border:2px solid var(--green-pale);" />
+              {% else %}
+                <span style="font-size:1.6rem;">🗑️</span>
+              {% endif %}
+            </td>
+            <td>{{ report.user.full_name or report.user.username }}</td>
+            <td><strong>{{ report.user.flat_number }}</strong></td>
+            <td>{{ report.location }}</td>
+            <td>
+              <span style="background:var(--green-mist);padding:3px 9px;border-radius:6px;font-size:0.8rem;font-weight:500;color:var(--green-deep);">
+                {{ report.waste_type }}
+              </span>
+            </td>
+            <td style="max-width:180px;">
+              <span style="font-size:0.84rem;color:var(--text-mid);">
+                {{ report.description[:60] }}{% if report.description|length > 60 %}…{% endif %}
+              </span>
+            </td>
+            <td style="white-space:nowrap;font-size:0.82rem;color:var(--text-light);">
+              {{ report.timestamp.strftime('%d %b %Y') }}
+            </td>
+            <td>
+              {% if report.status == 'Resolved' %}
+                <span class="badge badge-resolved">✅ Resolved</span>
+              {% else %}
+                <span class="badge badge-pending">⏳ Pending</span>
+              {% endif %}
+            </td>
+            <td>
+              <div style="display:flex;gap:5px;flex-wrap:nowrap;">
+                {% if report.status == 'Pending' %}
+                  <a href="{{ url_for('resolve_report', report_id=report.id) }}"
+                     class="btn btn-sm btn-primary" title="Mark Resolved">✅</a>
+                {% endif %}
+                <a href="{{ url_for('delete_report', report_id=report.id) }}"
+                   class="btn btn-sm btn-danger"
+                   onclick="return confirm('Delete report #{{ report.id }}?')"
+                   title="Delete">🗑️</a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">🌿</div>
+        <h3>No reports yet</h3>
+        <p>Your society is looking clean — no complaints submitted.</p>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="nature-strip">🌿 🌱 🍃 🌳 🍀 🌾 🌿 🌱 🍃 🌳</div>
+</div>
+{% endblock %}

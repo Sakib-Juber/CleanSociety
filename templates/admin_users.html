@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Society Members — CleanSociety{% endblock %}
+
+{% block content %}
+<div class="main-content">
+
+  <div class="page-hero">
+    <div class="page-hero-content">
+      <h1>👥 Society Members</h1>
+      <p>Manage registered residents of CleanSociety</p>
+    </div>
+    <div class="page-hero-decor">🏘️</div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card green">
+      <div class="stat-icon">🏠</div>
+      <div class="stat-value">{{ users|length }}</div>
+      <div class="stat-label">Total Members</div>
+    </div>
+    <div class="stat-card gold">
+      <div class="stat-icon">📋</div>
+      <div class="stat-value">{{ users|sum(attribute='reports')|list|length if users else 0 }}</div>
+      <div class="stat-label">Total Reports</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <h2>🏠 All Residents</h2>
+      <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline btn-sm">← Reports</a>
+    </div>
+
+    {% if users %}
+    <div class="card-body">
+      <div class="users-grid">
+        {% for u in users %}
+        <div class="user-card">
+          {% if u.profile_photo %}
+            <img class="user-card-avatar"
+                 src="{{ url_for('static', filename='uploads/' + u.profile_photo) }}"
+                 alt="{{ u.username }}" />
+          {% else %}
+            <div class="user-card-avatar-placeholder">🧑</div>
+          {% endif %}
+
+          <h4>{{ u.full_name or u.username }}</h4>
+          <p>👤 {{ u.username }}</p>
+          <p>🏠 Flat {{ u.flat_number }}</p>
+          {% if u.email %}<p>✉️ {{ u.email }}</p>{% endif %}
+          {% if u.mobile %}<p>📱 {{ u.mobile }}</p>{% endif %}
+          <p style="margin:0.5rem 0;">
+            <span class="badge badge-pending">{{ u.reports|length }} report{{ 's' if u.reports|length != 1 }}</span>
+          </p>
+          <p class="text-sm text-muted">Joined {{ u.joined_at.strftime('%d %b %Y') if u.joined_at }}</p>
+
+          <div class="mt-1">
+            <a href="{{ url_for('admin_delete_user', user_id=u.id) }}"
+               class="btn btn-danger btn-sm"
+               onclick="return confirm('Remove {{ u.username }} and all their reports?')">
+              🗑️ Remove
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% else %}
+      <div class="empty-state">
+        <div class="empty-icon">🌱</div>
+        <h3>No members yet</h3>
+        <p>Residents will appear here once they sign up.</p>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="nature-strip">🌿 🌱 🍃 🌳 🍀</div>
+</div>
+{% endblock %}
