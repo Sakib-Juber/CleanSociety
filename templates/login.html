@@ -1,26 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CleanSociety — Resident Login</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --green-deep:   #1a3d2b;
-      --green-mid:    #2e6b47;
-      --green-light:  #4a9463;
-      --gold:         #c8a84b;
-      --gold-light:   #e8cc7a;
-      --cream:        #f8f4ec;
-      --cream-dark:   #ede7d9;
-      --text-dark:    #1a2518;
-      --text-muted:   #5a6b55;
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CleanSociety — Resident Login</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    html, body {
+    :root {
+      --green-deep: #1a3d2b;
+      --green-mid: #2e6b47;
+      --green-light: #4a9463;
+      --gold: #c8a84b;
+      --gold-light: #e8cc7a;
+      --cream: #f8f4ec;
+      --cream-dark: #ede7d9;
+      --text-dark: #1a2518;
+      --text-muted: #5a6b55;
+    }
+
+    html,
+    body {
       height: 100%;
       font-family: 'Jost', sans-serif;
       background: var(--cream);
@@ -51,8 +61,8 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(ellipse 80% 60% at 30% 20%, rgba(74,148,99,0.35) 0%, transparent 70%),
-        radial-gradient(ellipse 60% 80% at 80% 80%, rgba(200,168,75,0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 60% at 30% 20%, rgba(74, 148, 99, 0.35) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 80% at 80% 80%, rgba(200, 168, 75, 0.15) 0%, transparent 60%),
         linear-gradient(160deg, #0d2318 0%, #1a3d2b 40%, #2e6b47 100%);
       z-index: 0;
     }
@@ -67,25 +77,76 @@
     /* Floating particles */
     .particle {
       position: absolute;
-      width: 6px; height: 6px;
+      width: 6px;
+      height: 6px;
       background: var(--gold);
       border-radius: 50%;
       opacity: 0;
       animation: float-up 8s infinite ease-in-out;
     }
-    .particle:nth-child(1)  { left: 15%; animation-delay: 0s;   width:4px; height:4px; }
-    .particle:nth-child(2)  { left: 35%; animation-delay: 1.5s; }
-    .particle:nth-child(3)  { left: 55%; animation-delay: 3s;   width:3px; height:3px; }
-    .particle:nth-child(4)  { left: 72%; animation-delay: 4.5s; }
-    .particle:nth-child(5)  { left: 88%; animation-delay: 2s;   width:5px; height:5px; }
-    .particle:nth-child(6)  { left: 25%; animation-delay: 6s;   width:3px; height:3px; }
-    .particle:nth-child(7)  { left: 60%; animation-delay: 7s; }
+
+    .particle:nth-child(1) {
+      left: 15%;
+      animation-delay: 0s;
+      width: 4px;
+      height: 4px;
+    }
+
+    .particle:nth-child(2) {
+      left: 35%;
+      animation-delay: 1.5s;
+    }
+
+    .particle:nth-child(3) {
+      left: 55%;
+      animation-delay: 3s;
+      width: 3px;
+      height: 3px;
+    }
+
+    .particle:nth-child(4) {
+      left: 72%;
+      animation-delay: 4.5s;
+    }
+
+    .particle:nth-child(5) {
+      left: 88%;
+      animation-delay: 2s;
+      width: 5px;
+      height: 5px;
+    }
+
+    .particle:nth-child(6) {
+      left: 25%;
+      animation-delay: 6s;
+      width: 3px;
+      height: 3px;
+    }
+
+    .particle:nth-child(7) {
+      left: 60%;
+      animation-delay: 7s;
+    }
 
     @keyframes float-up {
-      0%   { opacity: 0; transform: translateY(0) scale(1); bottom: 10%; }
-      20%  { opacity: 0.7; }
-      80%  { opacity: 0.4; }
-      100% { opacity: 0; transform: translateY(-120vh) scale(0.3); }
+      0% {
+        opacity: 0;
+        transform: translateY(0) scale(1);
+        bottom: 10%;
+      }
+
+      20% {
+        opacity: 0.7;
+      }
+
+      80% {
+        opacity: 0.4;
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-120vh) scale(0.3);
+      }
     }
 
     .left-content {
@@ -97,12 +158,13 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      background: rgba(200,168,75,0.15);
-      border: 1px solid rgba(200,168,75,0.4);
+      background: rgba(200, 168, 75, 0.15);
+      border: 1px solid rgba(200, 168, 75, 0.4);
       border-radius: 40px;
       padding: 8px 18px;
       margin-bottom: 24px;
     }
+
     .society-badge span {
       font-size: 11px;
       font-weight: 600;
@@ -110,15 +172,27 @@
       text-transform: uppercase;
       color: var(--gold-light);
     }
+
     .badge-dot {
-      width: 7px; height: 7px;
+      width: 7px;
+      height: 7px;
       background: var(--gold);
       border-radius: 50%;
       animation: pulse-dot 2s infinite;
     }
+
     @keyframes pulse-dot {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50%       { opacity: 0.5; transform: scale(1.4); }
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.5;
+        transform: scale(1.4);
+      }
     }
 
     .left-title {
@@ -129,6 +203,7 @@
       line-height: 1.1;
       margin-bottom: 18px;
     }
+
     .left-title em {
       font-style: italic;
       color: var(--gold-light);
@@ -136,7 +211,7 @@
 
     .left-desc {
       font-size: 14px;
-      color: rgba(255,255,255,0.6);
+      color: rgba(255, 255, 255, 0.6);
       line-height: 1.7;
       max-width: 340px;
       margin-bottom: 36px;
@@ -146,9 +221,11 @@
       display: flex;
       gap: 28px;
     }
+
     .stat-item {
       text-align: left;
     }
+
     .stat-num {
       font-family: 'Cormorant Garamond', serif;
       font-size: 2rem;
@@ -156,11 +233,12 @@
       color: var(--gold-light);
       line-height: 1;
     }
+
     .stat-label {
       font-size: 11px;
       letter-spacing: 1.5px;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.45);
+      color: rgba(255, 255, 255, 0.45);
       margin-top: 4px;
     }
 
@@ -179,17 +257,22 @@
     .right-panel::before {
       content: '';
       position: absolute;
-      top: -80px; right: -80px;
-      width: 300px; height: 300px;
-      background: radial-gradient(circle, rgba(74,148,99,0.08) 0%, transparent 70%);
+      top: -80px;
+      right: -80px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(74, 148, 99, 0.08) 0%, transparent 70%);
       border-radius: 50%;
     }
+
     .right-panel::after {
       content: '';
       position: absolute;
-      bottom: -60px; left: -60px;
-      width: 220px; height: 220px;
-      background: radial-gradient(circle, rgba(200,168,75,0.07) 0%, transparent 70%);
+      bottom: -60px;
+      left: -60px;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(200, 168, 75, 0.07) 0%, transparent 70%);
       border-radius: 50%;
     }
 
@@ -206,8 +289,10 @@
       gap: 12px;
       margin-bottom: 36px;
     }
+
     .logo-icon {
-      width: 44px; height: 44px;
+      width: 44px;
+      height: 44px;
       background: var(--green-deep);
       border-radius: 12px;
       display: flex;
@@ -215,6 +300,7 @@
       justify-content: center;
       font-size: 22px;
     }
+
     .logo-text {
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.4rem;
@@ -222,6 +308,7 @@
       color: var(--green-deep);
       letter-spacing: 0.5px;
     }
+
     .logo-text sub {
       display: block;
       font-family: 'Jost', sans-serif;
@@ -240,6 +327,7 @@
       color: var(--text-dark);
       margin-bottom: 6px;
     }
+
     .form-sub {
       font-size: 13px;
       color: var(--text-muted);
@@ -256,15 +344,36 @@
       align-items: center;
       gap: 8px;
     }
-    .flash-danger  { background: #fde8e8; color: #c0392b; border-left: 3px solid #c0392b; }
-    .flash-success { background: #e8f8ef; color: #1e7d46; border-left: 3px solid #1e7d46; }
-    .flash-warning { background: #fff8e1; color: #b7860b; border-left: 3px solid #f0c040; }
-    .flash-info    { background: #e8f0fe; color: #1a56b0; border-left: 3px solid #3b7bdc; }
+
+    .flash-danger {
+      background: #fde8e8;
+      color: #c0392b;
+      border-left: 3px solid #c0392b;
+    }
+
+    .flash-success {
+      background: #e8f8ef;
+      color: #1e7d46;
+      border-left: 3px solid #1e7d46;
+    }
+
+    .flash-warning {
+      background: #fff8e1;
+      color: #b7860b;
+      border-left: 3px solid #f0c040;
+    }
+
+    .flash-info {
+      background: #e8f0fe;
+      color: #1a56b0;
+      border-left: 3px solid #3b7bdc;
+    }
 
     /* Inputs */
     .field-group {
       margin-bottom: 18px;
     }
+
     .field-label {
       display: block;
       font-size: 11px;
@@ -274,16 +383,20 @@
       color: var(--text-muted);
       margin-bottom: 8px;
     }
+
     .field-wrap {
       position: relative;
     }
+
     .field-icon {
       position: absolute;
-      left: 14px; top: 50%;
+      left: 14px;
+      top: 50%;
       transform: translateY(-50%);
       font-size: 16px;
       pointer-events: none;
     }
+
     .field-wrap input {
       width: 100%;
       padding: 14px 14px 14px 44px;
@@ -296,11 +409,15 @@
       transition: border-color .2s, box-shadow .2s;
       outline: none;
     }
+
     .field-wrap input:focus {
       border-color: var(--green-mid);
-      box-shadow: 0 0 0 3px rgba(46,107,71,0.12);
+      box-shadow: 0 0 0 3px rgba(46, 107, 71, 0.12);
     }
-    .field-wrap input::placeholder { color: #bbb; }
+
+    .field-wrap input::placeholder {
+      color: #bbb;
+    }
 
     .btn-login {
       width: 100%;
@@ -319,21 +436,29 @@
       position: relative;
       overflow: hidden;
     }
+
     .btn-login::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(200,168,75,0.2) 0%, transparent 60%);
+      background: linear-gradient(135deg, rgba(200, 168, 75, 0.2) 0%, transparent 60%);
       opacity: 0;
       transition: opacity .2s;
     }
+
     .btn-login:hover {
       background: var(--green-mid);
       transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(26,61,43,0.3);
+      box-shadow: 0 6px 20px rgba(26, 61, 43, 0.3);
     }
-    .btn-login:hover::after { opacity: 1; }
-    .btn-login:active { transform: translateY(0); }
+
+    .btn-login:hover::after {
+      opacity: 1;
+    }
+
+    .btn-login:active {
+      transform: translateY(0);
+    }
 
     .divider {
       display: flex;
@@ -344,7 +469,9 @@
       font-size: 12px;
       color: var(--text-muted);
     }
-    .divider::before, .divider::after {
+
+    .divider::before,
+    .divider::after {
       content: '';
       flex: 1;
       height: 1px;
@@ -356,216 +483,289 @@
       font-size: 13px;
       color: var(--text-muted);
     }
+
     .signup-link a {
       color: var(--green-mid);
       font-weight: 600;
       text-decoration: none;
     }
-    .signup-link a:hover { text-decoration: underline; }
+
+    .signup-link a:hover {
+      text-decoration: underline;
+    }
 
     /* Responsive */
     @media (max-width: 768px) {
-      .page { grid-template-columns: 1fr; }
-      .left-panel { display: none; }
-      .right-panel { padding: 40px 28px; }
+      .page {
+        grid-template-columns: 1fr;
+      }
+
+      .left-panel {
+        display: none;
+      }
+
+      .right-panel {
+        padding: 40px 28px;
+      }
+    }
+
+    /* Password Toggle Styling */
+    .password-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .password-toggle img {
+      width: 20px;
+      height: 20px;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+
+    .password-toggle:hover img {
+      opacity: 1;
+    }
+
+    /* Adjust input padding to prevent text from overlapping the icon */
+    .field-wrap input[type="password"],
+    .field-wrap input[type="text"] {
+      padding-right: 44px;
     }
   </style>
 </head>
+
 <body>
 
-<div class="page">
+  <div class="page">
 
-  <!-- ── LEFT VISUAL PANEL ── -->
-  <div class="left-panel">
-    <!-- Particles -->
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
-    <div class="particle"></div>
+    <!-- ── LEFT VISUAL PANEL ── -->
+    <div class="left-panel">
+      <!-- Particles -->
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
 
-    <!-- Society scene SVG -->
-    <svg class="scene" viewBox="0 0 600 700" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-      <!-- Moon -->
-      <circle cx="480" cy="90" r="55" fill="rgba(200,168,75,0.12)"/>
-      <circle cx="480" cy="90" r="38" fill="rgba(200,168,75,0.18)"/>
+      <!-- Society scene SVG -->
+      <svg class="scene" viewBox="0 0 600 700" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+        <!-- Moon -->
+        <circle cx="480" cy="90" r="55" fill="rgba(200,168,75,0.12)" />
+        <circle cx="480" cy="90" r="38" fill="rgba(200,168,75,0.18)" />
 
-      <!-- Stars -->
-      <g fill="rgba(255,255,255,0.6)">
-        <circle cx="80"  cy="60"  r="1.5"/>
-        <circle cx="160" cy="40"  r="1"/>
-        <circle cx="240" cy="80"  r="1.5"/>
-        <circle cx="320" cy="30"  r="1"/>
-        <circle cx="130" cy="130" r="1"/>
-        <circle cx="380" cy="55"  r="1.5"/>
-        <circle cx="50"  cy="110" r="1"/>
-        <circle cx="210" cy="140" r="1"/>
-      </g>
-
-      <!-- Society building silhouette -->
-      <g opacity="0.9">
-        <!-- Main block -->
-        <rect x="80" y="280" width="440" height="300" rx="4" fill="#0d2318"/>
-        <!-- Roof parapet -->
-        <rect x="75" y="268" width="450" height="18" rx="3" fill="#0f2a1e"/>
-
-        <!-- Entrance arch -->
-        <rect x="248" y="390" width="104" height="190" fill="#0a1e12"/>
-        <ellipse cx="300" cy="390" rx="52" ry="30" fill="#0a1e12"/>
-
-        <!-- Windows row 1 -->
-        <g fill="rgba(200,168,75,0.55)">
-          <rect x="110" y="300" width="50" height="60" rx="4"/>
-          <rect x="185" y="300" width="50" height="60" rx="4"/>
-          <rect x="365" y="300" width="50" height="60" rx="4"/>
-          <rect x="440" y="300" width="50" height="60" rx="4"/>
+        <!-- Stars -->
+        <g fill="rgba(255,255,255,0.6)">
+          <circle cx="80" cy="60" r="1.5" />
+          <circle cx="160" cy="40" r="1" />
+          <circle cx="240" cy="80" r="1.5" />
+          <circle cx="320" cy="30" r="1" />
+          <circle cx="130" cy="130" r="1" />
+          <circle cx="380" cy="55" r="1.5" />
+          <circle cx="50" cy="110" r="1" />
+          <circle cx="210" cy="140" r="1" />
         </g>
-        <!-- Windows row 2 -->
-        <g fill="rgba(200,168,75,0.35)">
-          <rect x="110" y="390" width="50" height="55" rx="4"/>
-          <rect x="185" y="390" width="50" height="55" rx="4"/>
-          <rect x="365" y="390" width="50" height="55" rx="4"/>
-          <rect x="440" y="390" width="50" height="55" rx="4"/>
+
+        <!-- Society building silhouette -->
+        <g opacity="0.9">
+          <!-- Main block -->
+          <rect x="80" y="280" width="440" height="300" rx="4" fill="#0d2318" />
+          <!-- Roof parapet -->
+          <rect x="75" y="268" width="450" height="18" rx="3" fill="#0f2a1e" />
+
+          <!-- Entrance arch -->
+          <rect x="248" y="390" width="104" height="190" fill="#0a1e12" />
+          <ellipse cx="300" cy="390" rx="52" ry="30" fill="#0a1e12" />
+
+          <!-- Windows row 1 -->
+          <g fill="rgba(200,168,75,0.55)">
+            <rect x="110" y="300" width="50" height="60" rx="4" />
+            <rect x="185" y="300" width="50" height="60" rx="4" />
+            <rect x="365" y="300" width="50" height="60" rx="4" />
+            <rect x="440" y="300" width="50" height="60" rx="4" />
+          </g>
+          <!-- Windows row 2 -->
+          <g fill="rgba(200,168,75,0.35)">
+            <rect x="110" y="390" width="50" height="55" rx="4" />
+            <rect x="185" y="390" width="50" height="55" rx="4" />
+            <rect x="365" y="390" width="50" height="55" rx="4" />
+            <rect x="440" y="390" width="50" height="55" rx="4" />
+          </g>
+          <!-- Window glow effect -->
+          <rect x="110" y="300" width="50" height="60" rx="4" fill="url(#wglow)" opacity="0.6" />
+
+          <!-- Society name plate -->
+          <rect x="190" y="475" width="220" height="40" rx="6" fill="rgba(200,168,75,0.2)" />
+          <rect x="194" y="479" width="212" height="32" rx="4" fill="none" stroke="rgba(200,168,75,0.4)"
+            stroke-width="1" />
         </g>
-        <!-- Window glow effect -->
-        <rect x="110" y="300" width="50" height="60" rx="4" fill="url(#wglow)" opacity="0.6"/>
 
-        <!-- Society name plate -->
-        <rect x="190" y="475" width="220" height="40" rx="6" fill="rgba(200,168,75,0.2)"/>
-        <rect x="194" y="479" width="212" height="32" rx="4" fill="none" stroke="rgba(200,168,75,0.4)" stroke-width="1"/>
-      </g>
+        <!-- Trees left -->
+        <g>
+          <rect x="30" y="460" width="12" height="120" fill="#0d2318" />
+          <ellipse cx="36" cy="440" rx="35" ry="50" fill="#1a4a2e" />
+          <ellipse cx="36" cy="420" rx="25" ry="40" fill="#2e6b47" />
+          <ellipse cx="36" cy="405" rx="16" ry="28" fill="#3d8a5c" />
+        </g>
+        <!-- Trees right -->
+        <g>
+          <rect x="558" y="460" width="12" height="120" fill="#0d2318" />
+          <ellipse cx="564" cy="440" rx="35" ry="50" fill="#1a4a2e" />
+          <ellipse cx="564" cy="420" rx="25" ry="40" fill="#2e6b47" />
+          <ellipse cx="564" cy="405" rx="16" ry="28" fill="#3d8a5c" />
+        </g>
 
-      <!-- Trees left -->
-      <g>
-        <rect x="30" y="460" width="12" height="120" fill="#0d2318"/>
-        <ellipse cx="36" cy="440" rx="35" ry="50" fill="#1a4a2e"/>
-        <ellipse cx="36" cy="420" rx="25" ry="40" fill="#2e6b47"/>
-        <ellipse cx="36" cy="405" rx="16" ry="28" fill="#3d8a5c"/>
-      </g>
-      <!-- Trees right -->
-      <g>
-        <rect x="558" y="460" width="12" height="120" fill="#0d2318"/>
-        <ellipse cx="564" cy="440" rx="35" ry="50" fill="#1a4a2e"/>
-        <ellipse cx="564" cy="420" rx="25" ry="40" fill="#2e6b47"/>
-        <ellipse cx="564" cy="405" rx="16" ry="28" fill="#3d8a5c"/>
-      </g>
+        <!-- Ground -->
+        <rect x="0" y="570" width="600" height="130" fill="#0d2318" />
+        <ellipse cx="300" cy="572" rx="310" ry="20" fill="#122b1c" />
 
-      <!-- Ground -->
-      <rect x="0" y="570" width="600" height="130" fill="#0d2318"/>
-      <ellipse cx="300" cy="572" rx="310" ry="20" fill="#122b1c"/>
+        <!-- Pathway -->
+        <path d="M 250 580 L 350 580 L 370 700 L 230 700 Z" fill="#142e1f" opacity="0.7" />
 
-      <!-- Pathway -->
-      <path d="M 250 580 L 350 580 L 370 700 L 230 700 Z" fill="#142e1f" opacity="0.7"/>
+        <!-- Lamp post left -->
+        <g>
+          <rect x="155" y="490" width="5" height="90" fill="#1a3d2b" />
+          <ellipse cx="157" cy="488" rx="18" ry="6" fill="#162f22" />
+          <circle cx="157" cy="482" r="8" fill="rgba(200,168,75,0.7)" />
+          <circle cx="157" cy="482" r="12" fill="rgba(200,168,75,0.2)" />
+        </g>
+        <!-- Lamp post right -->
+        <g>
+          <rect x="440" y="490" width="5" height="90" fill="#1a3d2b" />
+          <ellipse cx="442" cy="488" rx="18" ry="6" fill="#162f22" />
+          <circle cx="442" cy="482" r="8" fill="rgba(200,168,75,0.7)" />
+          <circle cx="442" cy="482" r="12" fill="rgba(200,168,75,0.2)" />
+        </g>
 
-      <!-- Lamp post left -->
-      <g>
-        <rect x="155" y="490" width="5" height="90" fill="#1a3d2b"/>
-        <ellipse cx="157" cy="488" rx="18" ry="6" fill="#162f22"/>
-        <circle cx="157" cy="482" r="8" fill="rgba(200,168,75,0.7)"/>
-        <circle cx="157" cy="482" r="12" fill="rgba(200,168,75,0.2)"/>
-      </g>
-      <!-- Lamp post right -->
-      <g>
-        <rect x="440" y="490" width="5" height="90" fill="#1a3d2b"/>
-        <ellipse cx="442" cy="488" rx="18" ry="6" fill="#162f22"/>
-        <circle cx="442" cy="482" r="8" fill="rgba(200,168,75,0.7)"/>
-        <circle cx="442" cy="482" r="12" fill="rgba(200,168,75,0.2)"/>
-      </g>
+        <defs>
+          <radialGradient id="wglow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="rgba(200,168,75,0.8)" />
+            <stop offset="100%" stop-color="transparent" />
+          </radialGradient>
+        </defs>
+      </svg>
 
-      <defs>
-        <radialGradient id="wglow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="rgba(200,168,75,0.8)"/>
-          <stop offset="100%" stop-color="transparent"/>
-        </radialGradient>
-      </defs>
-    </svg>
-
-    <!-- Bottom content -->
-    <div class="left-content">
-      <div class="society-badge">
-        <div class="badge-dot"></div>
-        <span>Resident Portal</span>
-      </div>
-      <h1 class="left-title">
-        Your Society,<br/>
-        <em>Cleaner Every Day.</em>
-      </h1>
-      <p class="left-desc">
-        Report waste issues, track resolution progress, and help maintain a clean, green community — all from one place.
-      </p>
-      <div class="stats-row">
-        <div class="stat-item">
-          <div class="stat-num">24/7</div>
-          <div class="stat-label">Always Online</div>
+      <!-- Bottom content -->
+      <div class="left-content">
+        <div class="society-badge">
+          <div class="badge-dot"></div>
+          <span>Resident Portal</span>
         </div>
-        <div class="stat-item">
-          <div class="stat-num">Fast</div>
-          <div class="stat-label">Issue Tracking</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-num">Safe</div>
-          <div class="stat-label">Resident Data</div>
+        <h1 class="left-title">
+          Your Society,<br />
+          <em>Cleaner Every Day.</em>
+        </h1>
+        <p class="left-desc">
+          Report waste issues, track resolution progress, and help maintain a clean, green community — all from one
+          place.
+        </p>
+        <div class="stats-row">
+          <div class="stat-item">
+            <div class="stat-num">24/7</div>
+            <div class="stat-label">Always Online</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">Fast</div>
+            <div class="stat-label">Issue Tracking</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">Safe</div>
+            <div class="stat-label">Resident Data</div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- ── RIGHT FORM PANEL ── -->
-  <div class="right-panel">
-    <div class="form-box">
+    <!-- ── RIGHT FORM PANEL ── -->
+    <div class="right-panel">
+      <div class="form-box">
 
-      <div class="logo-mark">
-        <div class="logo-icon">🌿</div>
-        <div class="logo-text">
-          CleanSociety
-          <sub>Waste Management Portal</sub>
+        <div class="logo-mark">
+          <div class="logo-icon">🌿</div>
+          <div class="logo-text">
+            CleanSociety
+            <sub>Waste Management Portal</sub>
+          </div>
         </div>
-      </div>
 
-      <h2 class="form-heading">Welcome back</h2>
-      <p class="form-sub">Sign in to your resident account</p>
+        <h2 class="form-heading">Welcome back</h2>
+        <p class="form-sub">Sign in to your resident account</p>
 
-      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% with messages = get_flashed_messages(with_categories=true) %}
         {% for category, message in messages %}
-          <div class="flash-msg flash-{{ category }}">
-            {% if category == 'danger' %}⚠️{% elif category == 'success' %}✅{% elif category == 'info' %}ℹ️{% else %}🔔{% endif %}
-            {{ message }}
-          </div>
+        <div class="flash-msg flash-{{ category }}">
+          {% if category == 'danger' %}⚠️{% elif category == 'success' %}✅{% elif category == 'info' %}ℹ️{% else %}🔔{%
+          endif %}
+          {{ message }}
+        </div>
         {% endfor %}
-      {% endwith %}
+        {% endwith %}
 
-      <form method="POST">
-        <div class="field-group">
-          <label class="field-label">Username</label>
-          <div class="field-wrap">
-            <span class="field-icon">👤</span>
-            <input type="text" name="username" placeholder="Enter your username" required autocomplete="username"/>
+        <form method="POST">
+          <div class="field-group">
+            <label class="field-label">Username</label>
+            <div class="field-wrap">
+              <span class="field-icon">👤</span>
+              <input type="text" name="username" placeholder="Enter your username" required autocomplete="username" />
+            </div>
           </div>
+
+          <div class="field-group">
+            <label class="field-label">Password</label>
+            <div class="field-wrap">
+              <span class="field-icon">🔒</span>
+              <input type="password" name="password" id="password" placeholder="Enter your password" required
+                autocomplete="current-password" />
+              <button type="button" id="togglePassword" class="password-toggle">
+                <img src="{{ url_for('static', filename='assets/images/show.png') }}" id="toggleIcon"
+                  alt="Toggle Password">
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-login">Sign In →</button>
+        </form>
+
+        <div class="divider">or</div>
+
+        <div class="signup-link">
+          New resident? <a href="{{ url_for('signup') }}">Create an account</a>
         </div>
 
-        <div class="field-group">
-          <label class="field-label">Password</label>
-          <div class="field-wrap">
-            <span class="field-icon">🔒</span>
-            <input type="password" name="password" placeholder="Enter your password" required autocomplete="current-password"/>
-          </div>
-        </div>
-
-        <button type="submit" class="btn-login">Sign In →</button>
-      </form>
-
-      <div class="divider">or</div>
-
-      <div class="signup-link">
-        New resident? <a href="{{ url_for('signup') }}">Create an account</a>
       </div>
-
     </div>
-  </div>
 
-</div>
+  </div>
+  <script>
+    const togglePassword = document.querySelector('#togglePassword');
+    const password = document.querySelector('#password');
+    const toggleIcon = document.querySelector('#toggleIcon');
+
+    // Paths to your images (rendered by Jinja)
+    const showIconPath = "{{ url_for('static', filename='assets/images/show.png') }}";
+    const hideIconPath = "{{ url_for('static', filename='assets/images/hide.png') }}";
+
+    togglePassword.addEventListener('click', function () {
+      // Toggle the type attribute
+      const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+      password.setAttribute('type', type);
+
+      // Toggle the image source
+      toggleIcon.src = type === 'password' ? showIconPath : hideIconPath;
+    });
+  </script>
 
 </body>
+
 </html>

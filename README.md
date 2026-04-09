@@ -93,5 +93,5 @@ http://127.0.0.1:5000
 - Resolve or Delete individual reports
 - Dashboard stats: total, pending, resolved, **members**
 
-## 🚀 Roadmap
+## Roadmap
 - [ ] Replace generic emojis with custom SVG vector icons.
