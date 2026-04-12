@@ -3,7 +3,7 @@
 
 {% block extra_css %}
 .page-header { margin-bottom: 28px; }
-.page-title { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 700; color: var(--green-deep); }
+.page-title { font-family: 'Inter', serif; font-size: 2rem; font-weight: 700; color: var(--green-deep); }
 .page-sub { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
 
 .two-col { display: grid; grid-template-columns: 1fr 1.4fr; gap: 24px; align-items: start; }
@@ -14,7 +14,7 @@ background: #fff; border-radius: 16px; border: 1px solid var(--cream-dark);
 padding: 28px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);
 }
 .card-title {
-font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 700;
+font-family: 'Inter', serif; font-size: 1.3rem; font-weight: 700;
 color: var(--green-deep); margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
 }
 .field-group { margin-bottom: 16px; }
@@ -35,24 +35,53 @@ border-color: var(--green-mid); background: #fff;
 box-shadow: 0 0 0 3px rgba(46,107,71,0.1);
 }
 .btn-submit {
-width: 100%; padding: 14px; background: var(--green-deep); color: #fff;
-border: none; border-radius: 12px; font-family: 'Jost', sans-serif;
-font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 4px;
-transition: background .2s, transform .15s;
+width: 100%;
+padding: 16px;
+margin-top: 10px;
+background: linear-gradient(135deg, var(--green-deep), #3fae6a);
+color: #fff;
+border: none;
+border-radius: 14px; /* Matches the cards */
+font-family: 'Jost', sans-serif;
+font-size: 16px;
+font-weight: 600;
+letter-spacing: 0.5px;
+cursor: pointer;
+box-shadow: 0 4px 15px rgba(46, 107, 71, 0.2);
+transition: all 0.3s ease;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 10px;
 }
-.btn-submit:hover { background: var(--green-mid); transform: translateY(-1px); }
 
+.btn-submit:hover {
+transform: translateY(-2px);
+box-shadow: 0 6px 20px rgba(46, 107, 71, 0.3);
+filter: brightness(1.1);
+}
+
+.btn-submit:active {
+transform: translateY(1px); /* Haptic-like "click" feel */
+box-shadow: 0 2px 8px rgba(46, 107, 71, 0.2);
+}
 /* Camera */
 .camera-section { margin-bottom: 16px; }
 .camera-btns { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
 .btn-cam {
-padding: 9px 14px; border-radius: 10px; border: 1.5px solid var(--cream-dark);
-background: #fff; font-family: 'Jost', sans-serif; font-size: 12px; font-weight: 500;
-color: var(--text-muted); cursor: pointer; transition: all .2s;
+flex: 1;
+padding: 12px;
+font-size: 13px;
+border-radius: 12px;
 }
 .btn-cam:hover { border-color: var(--green-mid); color: var(--green-mid); }
 #camera-preview-wrap { display: none; position: relative; border-radius: 12px; overflow: hidden; }
-#camera-preview { width: 100%; border-radius: 12px; }
+#camera-preview {
+width: 100%;
+height: auto;
+max-height: 260px;
+object-fit: cover;
+}
 #capture-btn {
 width: 100%; margin-top: 6px; padding: 10px; background: var(--green-mid); color: #fff;
 border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer;
@@ -60,40 +89,133 @@ border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: po
 #captured-preview { display: none; width: 100%; border-radius: 12px; margin-top: 6px; }
 
 /* Reports list */
-.reports-list { display: flex; flex-direction: column; gap: 14px; }
-.report-card {
-background: #fff; border-radius: 14px; border: 1px solid var(--cream-dark);
-padding: 18px; display: flex; gap: 16px; align-items: flex-start;
-transition: box-shadow .2s;
+/* Modern Card View for Reports */
+.reports-list {
+display: grid;
+grid-template-columns: 1fr;
+gap: 16px;
 }
-.report-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.07); }
-.report-thumb {
-width: 70px; height: 70px; object-fit: cover; border-radius: 10px;
-border: 2px solid var(--cream-dark); flex-shrink: 0;
-}
-.no-thumb {
-width: 70px; height: 70px; border-radius: 10px; background: var(--cream);
-border: 2px solid var(--cream-dark); display: flex; align-items: center;
-justify-content: center; font-size: 24px; flex-shrink: 0;
-}
-.report-info { flex: 1; min-width: 0; }
-.report-top { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; flex-wrap: wrap; }
-.report-id { font-size: 11px; color: #aaa; font-weight: 500; }
-.badge {
-padding: 2px 9px; border-radius: 20px; font-size: 10px; font-weight: 700;
-letter-spacing: .5px;
-}
-.badge-pending { background: #fff3e0; color: #e67e22; }
-.badge-resolved { background: #e8f8ef; color: #1e7d46; }
-.report-type { font-weight: 600; font-size: 14px; color: var(--text-dark); margin-bottom: 2px; }
-.report-loc { font-size: 12px; color: var(--text-muted); }
-.report-date { font-size: 11px; color: #bbb; margin-top: 4px; }
-.empty-box { text-align: center; padding: 48px 20px; color: var(--text-muted); background: #fff; border-radius: 16px;
-border: 1px solid var(--cream-dark); }
-.empty-box .emoji { font-size: 40px; margin-bottom: 10px; }
 
+.report-card {
+background: #fff;
+border-radius: 18px;
+border: 1px solid var(--cream-dark);
+padding: 16px;
+display: flex;
+gap: 16px;
+transition: all 0.3s ease;
+position: relative;
+overflow: hidden;
+box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.report-card:hover {
+transform: translateY(-3px);
+box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+border-color: var(--green-mid);
+}
+
+/* Image styling */
+.report-thumb, .no-thumb {
+width: 90px;
+height: 90px;
+border-radius: 14px;
+object-fit: cover;
+flex-shrink: 0;
+border: 1px solid var(--cream-dark);
+}
+
+.no-thumb {
+background: var(--cream);
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 32px;
+}
+
+/* Content Area */
+.report-info {
+flex: 1;
+display: flex;
+flex-direction: column;
+justify-content: center;
+}
+
+.report-top {
+display: flex;
+justify-content: space-between;
+align-items: flex-start;
+margin-bottom: 6px;
+}
+
+.report-type {
+font-size: 16px;
+font-weight: 700;
+color: var(--green-deep);
+margin-bottom: 4px;
+}
+
+.report-loc {
+font-size: 13px;
+color: var(--text-dark);
+display: flex;
+align-items: center;
+gap: 4px;
+margin-bottom: 8px;
+}
+
+.report-date {
+font-size: 11px;
+color: var(--text-muted);
+font-weight: 500;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+}
+
+/* Modern Badges */
+.badge {
+padding: 5px 12px;
+border-radius: 10px;
+font-size: 10px;
+font-weight: 800;
+text-transform: uppercase;
+letter-spacing: 1px;
+}
+
+.badge-pending {
+background: #fff8e1;
+color: #ffa000;
+border: 1px solid #ffe082;
+}
+
+.badge-resolved {
+background: #e8f5e9;
+color: #2e7d32;
+border: 1px solid #c8e6c9;
+}
+
+/* Responsive fix for very small screens */
+@media (max-width: 400px) {
+.report-card {
+flex-direction: column;
+}
+.report-thumb, .no-thumb {
+width: 100%;
+height: 150px;
+}
+}
 @media (max-width: 800px) {
-.two-col { grid-template-columns: 1fr; }
+.two-col {
+display: grid;
+grid-template-columns: 1fr 1.3fr;
+gap: 20px;
+}
+
+@media (max-width: 1024px) {
+.two-col {
+grid-template-columns: 1fr;
+}
+}
 }
 {% endblock %}
 
@@ -107,7 +229,6 @@ border: 1px solid var(--cream-dark); }
 <div class="two-col">
   <!-- REPORT FORM -->
   <div class="card">
-    <!-- TODO(sz): Change generic emojis with meaningful vector images. -->
     <div class="card-title">📋 New Waste Report</div>
     <form method="POST" enctype="multipart/form-data">
       <input type="hidden" name="camera_photo" id="camera_data" />
@@ -147,19 +268,17 @@ border: 1px solid var(--cream-dark); }
       <!-- Camera / Upload -->
       <div class="camera-section">
         <label class="field-label">Photo (optional)</label>
-        <div class="camera-btns">
-          <button type="button" class="btn-cam" id="open-cam-btn">📷 Use Camera</button>
-          <button type="button" class="btn-cam" id="retake-btn" style="display:none">🔄 Retake</button>
+        <div class="upload-box" id="upload-box">
+          <input type="file" name="photo" id="file-input" accept="image/*" capture="environment" hidden />
+          <div class="upload-content">
+            <div class="upload-icon">📷</div>
+            <div class="upload-text-wrap">
+              <p class="upload-text">Attach or Take Photo</p>
+              <span class="upload-sub">Tap to open camera</span>
+            </div>
+          </div>
         </div>
-        <div id="camera-preview-wrap">
-          <video id="camera-preview" autoplay playsinline></video>
-          <button type="button" id="capture-btn">📸 Capture Photo</button>
-        </div>
-        <img id="captured-preview" alt="Captured" />
-        <div class="field-wrap" style="margin-top:8px;">
-          <span class="field-icon">🖼️</span>
-          <input type="file" name="photo" id="file-input" accept="image/*" style="padding-left:42px;" />
-        </div>
+        <img id="captured-preview" class="preview-img" />
       </div>
 
       <button type="submit" class="btn-submit">Submit Report →</button>
@@ -253,6 +372,44 @@ border: 1px solid var(--cream-dark); }
 </script>
 <!-- AI CHAT BUTTON -->
 <style>
+  /* Decluttering the Top Action Bar for Mobile */
+  @media (max-width: 600px) {
+
+    /* Assuming your header has a class like .navbar or .top-bar */
+    nav,
+    .navbar,
+    .header-container {
+      padding: 10px 15px !important;
+      height: 60px;
+      /* Force a slim height */
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* If you have a list of links, stop them from wrapping */
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      /* Allow horizontal swipe if too many links */
+      white-space: nowrap;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+      /* Hide scrollbar for clean look */
+    }
+
+    .nav-links::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Shrink the logo/brand name to save space */
+    .brand-logo {
+      font-size: 1.1rem !important;
+      letter-spacing: -0.5px;
+    }
+  }
+
   .ai-chat-btn {
     position: fixed;
     bottom: 20px;
@@ -293,6 +450,74 @@ border: 1px solid var(--cream-dark); }
       transform: translateY(0px);
     }
   }
+
+  /* Compact & Modern Upload Box */
+  .upload-box {
+    border: 1.5px dashed var(--cream-dark);
+    border-radius: 12px;
+    padding: 12px 16px;
+    /* Reduced padding */
+    text-align: left;
+    /* Align left for horizontal look */
+    background: var(--cream);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .upload-box:hover {
+    border-color: var(--green-mid);
+    background: #fff;
+    transform: scale(1.01);
+  }
+
+  .upload-content {
+    display: flex;
+    flex-direction: row;
+    /* Row instead of column */
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }
+
+  .upload-icon {
+    font-size: 20px;
+    /* Smaller icon */
+    background: #fff;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  }
+
+  .upload-text-wrap {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .upload-text {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0;
+  }
+
+  .upload-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .preview-img {
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 12px;
+    display: none;
+  }
 </style>
 
 <a href="{{ url_for('chat') }}" class="ai-chat-btn" style="text-decoration: none;">
@@ -300,6 +525,22 @@ border: 1px solid var(--cream-dark); }
 </a>
 
 <script>
+  const uploadBox = document.getElementById('upload-box');
+  const fileInput = document.getElementById('file-input');
+
+  uploadBox.addEventListener('click', () => {
+    fileInput.click();
+  });
+
+  fileInput.addEventListener('change', () => {
+    const file = fileInput.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      capturedImg.src = url;
+      capturedImg.style.display = 'block';
+      cameraData.value = '';
+    }
+  });
   function goToChat() {
     window.location.href = "/chat.html";  // use root-relative path
   }
